@@ -1,0 +1,6 @@
+logger:
+  clear: true
+  all:
+    file:
+      - file1.log
+      - file2.log
