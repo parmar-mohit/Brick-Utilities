@@ -11,16 +11,11 @@ import com.brick.utilities.file.YamlFileReader;
 public class Config {
     public static final String SEPERATOR = ".";
     private static final String SEPERATOR_REGEX = "\\.";
-    private static final String CONFIG_FILE = "application.yaml";
+    private static final String CONFIG_FILE = "/application.yaml";
 
 
-    /*
-        Singleton Pattern to Ensure Config File is read only once
-     */
-    static {
-        instance = new Config();
-    }
-    private static final Config instance;
+    
+    private static Config instance;
 
     private BrickMap configMap;
     private Config()  {
@@ -32,18 +27,32 @@ public class Config {
             configMap = null;
         }
     }
+    
+    /*
+    Singleton Pattern to Ensure Config File is read only once
+     */
+    public static Config getInstance() {
+        if (instance == null) {
+            synchronized (Config.class) {
+                if (instance == null) {
+                    instance = new Config();
+                }
+            }
+        }
+        return instance;
+    }
 
     /*
         Description: Returns Data from Config File based on key
      */
     public static Object getConfigObject(String key) throws ConfigException {
-        if( instance == null ){
+        if( getInstance() == null ){
             return null;
         }
 
         String[] nestedKeys = key.split(SEPERATOR_REGEX);
         try {
-            BrickMap currentMap = instance.configMap;
+            BrickMap currentMap = getInstance().configMap;
             for (int i = 0; i < nestedKeys.length; i++) {
                 if( currentMap.contains(nestedKeys[i]) ){
 
@@ -53,7 +62,7 @@ public class Config {
 
                     currentMap = currentMap.getBrickMap(nestedKeys[i]);
                 }else{
-                    return null;
+                    throw new KeyNotFound(nestedKeys[i]);
                 }
             }
         }catch(KeyNotFound e){
@@ -73,5 +82,27 @@ public class Config {
             throw new ConfigException(e.getMessage());
         }
     }
+
+	/*
+        Description: Returns Integer Data from Config File
+     */
+	public static Integer getConfigInteger(String key) throws ConfigException {
+		try{
+			return (Integer)getConfigObject(key);
+		}catch(ClassCastException e){
+			throw new ConfigException(e.getMessage());
+		}
+	}
+	
+	/*
+	 	Description: Returns Integer Data from Config File if Present else returns Default Value
+	 */
+	public static int getConfigIntegerOrDefault(String key, int defaultValue){
+		try {
+			return (Integer)getConfigObject(key);
+		}catch(Exception e) {
+			return defaultValue;
+		}
+	}
 }
 

@@ -81,6 +81,22 @@ public class BrickMap implements Iterable<Map.Entry<String, Object>> {
 
         return (List<Map<String,Object>>) map.get(key) ;
     }
+    
+    public List<String> getListOfString(String key) throws KeyNotFound {
+    	if( !map.containsKey(key) ) {
+    		throw new KeyNotFound(key);
+    	}
+    	
+    	return (List<String>) map.get(key);
+    }
+    
+    public List<Object> getListOfObject(String key) throws KeyNotFound {
+    	if( !map.containsKey(key) ) {
+    		throw new KeyNotFound(key);
+    	}
+    	
+    	return (List<Object>) map.get(key);
+    }
 
     public Optional<List<String>> getOptionalListOfString(String key){
         if( map.containsKey(key) ){

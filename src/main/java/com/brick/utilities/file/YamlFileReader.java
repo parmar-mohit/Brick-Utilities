@@ -25,7 +25,7 @@ public class YamlFileReader extends FileReader {
     public BrickMap getMap() throws FileNotFoundException, InvalidData {
         Yaml yamlFile = new Yaml();
 
-        try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(this.fileName)) {
+    	 try (InputStream in = getClass().getResourceAsStream(this.fileName)) {
             if (in == null) {
                 throw new FileNotFoundException("Cannot Find File : "+ this.fileName);
             }

@@ -16,4 +16,9 @@ public abstract class FileReader {
     }
 
     public abstract BrickMap getMap() throws FileNotFoundException, InvalidData;
+    
+    public static String getFileExtension(String fileName) {
+    	String[] nameParts = fileName.split("\\.");
+    	return nameParts[nameParts.length-1];
+    }
 }

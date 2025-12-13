@@ -21,7 +21,15 @@ public class ConfigTest {
 
         assertTrue(Config.getConfigBoolean(clearFlag));
         assertEquals(outputList,Config.getConfigObject(allLog));
-        assertNull(Config.getConfigObject(invalidKey));
+        assertThrows(ConfigException.class, ()->{
+        	Config.getConfigBoolean(invalidKey);
+        });
+        
+        
+        String intKey = "xyz.abc";
+        assertEquals(123, Config.getConfigInteger(intKey));
+        assertEquals(123, Config.getConfigIntegerOrDefault(intKey, 345));
+        assertEquals(345, Config.getConfigIntegerOrDefault(invalidKey, 345));
     }
 
     @Test

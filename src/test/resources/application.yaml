@@ -4,3 +4,5 @@ logger:
     file:
       - file1.log
       - file2.log
+xyz:
+  abc: 123

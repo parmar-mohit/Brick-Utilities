@@ -24,7 +24,7 @@ public class YamlFileReaderTest {
 
     @Test
     public void test_invalidYaml(){
-        String fileName = "yaml/invalid_data.yaml";
+        String fileName = "/yaml/invalid_data.yaml";
         FileReader fileReader = new YamlFileReader(fileName);
         assertThrows(InvalidData.class,()->{
             fileReader.getMap();
@@ -34,7 +34,7 @@ public class YamlFileReaderTest {
 
     @Test
     public void test_success() throws InvalidData, FileNotFoundException {
-        String fileName = "yaml/success.yaml";
+        String fileName = "/yaml/success.yaml";
         FileReader fileReader = new YamlFileReader(fileName);
 
         Map<String,Object> expectedMap = new HashMap<>();
