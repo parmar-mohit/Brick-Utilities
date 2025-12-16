@@ -12,6 +12,4 @@ public class KeyNotFound extends Exception {
 	public String getKeyNotFound() {
 		return keyNotFound;
 	}
-    
-    
 }

@@ -3,6 +3,8 @@ package com.brick.utilities;
 import com.brick.utilities.exception.ConfigException;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,10 @@ public class ConfigTest {
         String allLog = "logger" + Config.SEPERATOR + "all" +Config.SEPERATOR + "file";
         assertThrows(ConfigException.class,()->{
             Config.getConfigBoolean(allLog);
+        });
+        
+        assertThrows(ConfigException.class,()->{
+        	Config.getConfigInteger(allLog);
         });
     }
 }

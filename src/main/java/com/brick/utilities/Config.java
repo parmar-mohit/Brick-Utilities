@@ -1,6 +1,10 @@
 package com.brick.utilities;
 
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+
 import com.brick.utilities.exception.ConfigException;
+import com.brick.utilities.exception.InvalidData;
 import com.brick.utilities.exception.KeyNotFound;
 import com.brick.utilities.file.FileReader;
 import com.brick.utilities.file.YamlFileReader;
@@ -18,14 +22,14 @@ public class Config {
     private static Config instance;
 
     private BrickMap configMap;
-    private Config()  {
+    private Config() {
         FileReader fileReader = new YamlFileReader(CONFIG_FILE);
         try {
-            configMap = fileReader.getMap();
-        } catch (Exception e) {
-            e.printStackTrace();
-            configMap = null;
-        }
+			configMap = fileReader.getMap();
+		} catch (FileNotFoundException | InvalidData e) {
+			e.printStackTrace();
+			configMap = new BrickMap( new HashMap<String,Object>() ); // Creating with Empty Map
+		}
     }
     
     /*
@@ -46,30 +50,22 @@ public class Config {
         Description: Returns Data from Config File based on key
      */
     public static Object getConfigObject(String key) throws ConfigException {
-        if( getInstance() == null ){
-            return null;
-        }
-
         String[] nestedKeys = key.split(SEPERATOR_REGEX);
+        
         try {
-            BrickMap currentMap = getInstance().configMap;
+        	BrickMap currentMap = getInstance().configMap;
             for (int i = 0; i < nestedKeys.length; i++) {
-                if( currentMap.contains(nestedKeys[i]) ){
-
-                    if( i == nestedKeys.length - 1){
-                        return currentMap.getObject(nestedKeys[i]);
-                    }
-
-                    currentMap = currentMap.getBrickMap(nestedKeys[i]);
-                }else{
-                    throw new KeyNotFound(nestedKeys[i]);
+                if( i == nestedKeys.length - 1){
+                    return currentMap.getObject(nestedKeys[i]);
                 }
+
+                currentMap = currentMap.getBrickMap(nestedKeys[i]);
             }
         }catch(KeyNotFound e){
             throw new ConfigException(e.getMessage());
         }
 
-        return null; // Returns null if key is not found or some exception or unexpected event occurs
+        return null; // Dead Code Execution will never reach here 
     }
 
     /*

@@ -51,6 +51,9 @@ public class BrickMapTest {
         map.put("boolean", true);
 
         BrickMap brickMap = new BrickMap(map);
+        
+        assertTrue(brickMap.contains("boolean"));
+        assertFalse(brickMap.contains(invalidKey));
 
         assertEquals(new BrickMap(subMap), brickMap.getBrickMap("subMap"));
         assertThrows(KeyNotFound.class,()->{
@@ -84,6 +87,16 @@ public class BrickMapTest {
 
         assertEquals(listOfString,brickMap.getOptionalListOfString("listOfString").get());
         assertFalse(brickMap.getOptionalListOfString(invalidKey).isPresent());
+        
+        assertEquals(listOfString, brickMap.getListOfString("listOfString"));
+        assertThrows(KeyNotFound.class, ()->{
+        	brickMap.getListOfString(invalidKey);
+        });
+        
+        assertEquals(listOfString, brickMap.getListOfObject("listOfString"));
+        assertThrows(KeyNotFound.class, ()->{
+        	brickMap.getListOfObject(invalidKey);
+        });
 
         assertEquals(listOfInteger,brickMap.getOptionalListOfInteger("listOfInteger").get());
         assertFalse(brickMap.getOptionalListOfInteger(invalidKey).isPresent());
@@ -103,7 +116,22 @@ public class BrickMapTest {
         assertThrows(KeyNotFound.class,()->{
             brickMap.getObject(invalidKey);
         });
+        
+        BrickMap newBrickMap = new BrickMap(map);
+        assertEquals(newBrickMap, brickMap);
+        assertEquals(newBrickMap.hashCode(), brickMap.hashCode());
+        
+        for( Map.Entry<String,Object> entry: brickMap ) {
+        	assertEquals(entry.getValue(), brickMap.getObject(entry.getKey()) );
+        }
 
+        assertFalse(brickMap.equals(invalidKey));
         assertFalse(brickMap.isEmpty());
+    }
+    
+    @Test
+    public void nullMap() {
+    	BrickMap brickMap = new BrickMap(null);
+    	assertTrue( brickMap.isEmpty() );
     }
 }

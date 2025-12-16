@@ -10,14 +10,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
-public class BrickRequestBody {
+public class BrickRequestData {
 	private JsonNode requestBody;
 	private Map<String,String> pathVariables;
 	private Map<String,String> headers;
 	private List<Cookie> cookies;
 	private Map<String,String[]> queryParams;
 	
-	public BrickRequestBody(JsonNode requestBody, Map<String, String> pathVariables, Map<String, String> headers,List<Cookie> cookies, Map<String, String[]> queryParams) {
+	public BrickRequestData(JsonNode requestBody, Map<String, String> pathVariables, Map<String, String> headers,List<Cookie> cookies, Map<String, String[]> queryParams) {
 		super();
 		this.requestBody = requestBody;
 		this.pathVariables = pathVariables;
