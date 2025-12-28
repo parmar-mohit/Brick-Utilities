@@ -52,7 +52,13 @@ public class BrickMap implements Iterable<Map.Entry<String, Object>> {
 
     public Optional<Double> getOptionalDouble(String key){
         if( map.containsKey(key) ){
-            return Optional.of( (Double) map.get(key) );
+        	Object value = map.get(key);
+        	if (value instanceof Number) {
+                return Optional.of(((Number) value).doubleValue());
+            }else {
+            	ClassCastException classCastException = new ClassCastException("Cannot cast : "+value+" to Double");
+            	throw classCastException;
+            }
         }
 
         return Optional.empty();
